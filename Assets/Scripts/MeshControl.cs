@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Xml;
 using Unity.VisualScripting;
@@ -11,36 +12,32 @@ using static UnityEngine.InputManagerEntry;
 public class MeshControl : MonoBehaviour
 {
     public Material defMat;
-    public int xSize = 10;
-    public int ySize = 10;
     public bool revesedBuffer = false;
     public bool autoSize = false;
 
-    public float inputMulti = 100;
-    public float changeDamp = 3;
+    //public float inputMulti = 100;
+    //public float changeDamp = 3;
 
     Mesh mesh;
     Vector3[] vertices;
     int[] triangles;
 
     private FrequencyAnalizer analyze;
+    private InfinityCycler cycler;
+    private int xSize = 10;
+    private int ySize = 10;
 
 
     void Start()
     {
-        analyze = FrequencyAnalizer.inst;
+        //analyze = FrequencyAnalizer.inst;
+        cycler = InfinityCycler.inst;
+        xSize = cycler.xSize;
+        ySize =cycler.ySize;
 
-        if (autoSize)
-        {
-            ySize = (int)Mathf.Sqrt(analyze.buffSize) - 1;
-            xSize = ySize;
-        }
-        else
-            ySize = (analyze.buffSize / (xSize + 1)) - 1;
         mesh = new Mesh();
         GetComponent<MeshFilter>().mesh = mesh;
         CreateShape();
-        analyze.soundSamples.AddListener(FrequencyToMesh);
         UpdateMesh();
         GetComponent<MeshRenderer>().material = defMat;
     }
@@ -79,57 +76,22 @@ public class MeshControl : MonoBehaviour
         }
 
     }
-    private void FrequencyToMesh(float[] buffer)
+    private void Update()
     {
-        
-        //if (revesedBuffer)
-        //{
-        //    System.Array.Reverse(buffer);
-        //}
         if (revesedBuffer)
-        {
-            int i = 0;
-            for (int ind = i + xSize, y = 0; y <= ySize; y++)
-            {
-                for (int x = 0; x <= xSize; x++)
-                {
-                    var temp = buffer[ind - x];
-                    buffer[ind - x] = buffer[i];
-                    buffer[i] = temp;
-                    i++;
-                }
-            }
-            for (int k = 0; k < vertices.Length; k++)
-            {
-                vertices[k].y = Mathf.Lerp(vertices[k].y, buffer[k] * inputMulti, changeDamp * Time.deltaTime);
-            }
-        }
-        if(!revesedBuffer)
         {
             for (int i = 0; i < vertices.Length; i++)
             {
-                vertices[i].y = Mathf.Lerp(vertices[i].y, buffer[i] * inputMulti, changeDamp * Time.deltaTime);
+                vertices[i].y = cycler.reversedVertices[i].y;
             }
         }
-        //int i = 0;
-        //for (int ind = i + xSize, z = 0; z <= ySize; z++)
-        //{
-        //    for (int x = 0; x <= xSize; x++)
-        //    {
-        //        var temp = vertices[ind - x].y;
-        //        vertices[ind - x].y = vertices[i].y;
-        //        vertices[i].y = temp;
-        //        i++;
-        //    }
-        //}
-        //for (int i = 0; i < xSize+1; i++)
-        //{
-        //    var temp = vertices[(xSize - i)*ySize].y;
-        //    vertices[(xSize - i) * ySize].y = vertices[i*ySize].y;
-        //    vertices[i*ySize].y = temp;
-        //}
-
-
+        else
+        {
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                vertices[i].y = cycler.vertices[i].y;
+            }
+        }
         UpdateMesh();
     }
 
@@ -141,4 +103,30 @@ public class MeshControl : MonoBehaviour
 
         mesh.RecalculateNormals();
     }
+    //private void FrequencyToMesh(float[] buffer)
+    //{
+
+    //    if (revesedBuffer)
+    //    {
+    //        int i = 0;
+    //        for (int y = 0; y <= ySize; y++)
+    //        {
+    //            int ind = i + xSize;
+    //            for (int x = 0; x <= xSize; x++)
+    //            {
+    //                vertices[ind-x].y = Mathf.Lerp(vertices[ind-x].y, buffer[i] * inputMulti, changeDamp * Time.deltaTime);
+    //                vertices[i].y = Mathf.Lerp(vertices[i].y, buffer[ind-x] * inputMulti, changeDamp * Time.deltaTime);
+    //                i++;
+    //            }
+    //        }
+    //    }
+    //    if(!revesedBuffer)
+    //    {
+    //        for (int i = 0; i < vertices.Length; i++)
+    //        {
+    //            vertices[i].y = Mathf.Lerp(vertices[i].y, buffer[i] * inputMulti, changeDamp * Time.deltaTime);
+    //        }
+    //    }
+    //    UpdateMesh();
+    //}
 }
