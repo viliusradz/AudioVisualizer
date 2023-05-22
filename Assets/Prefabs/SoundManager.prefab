@@ -1,0 +1,151 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2013166116746570383
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2013166116746570380}
+  - component: {fileID: 2013166116746570374}
+  - component: {fileID: 2013166116746570375}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2013166116746570380
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013166116746570383}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2013166116746570374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013166116746570383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9517072a7b04e684aa91ddf7759fc75d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cubePref: {fileID: 7744181066841629318, guid: c952f7dfac321ef40bbc1139bd831153,
+    type: 3}
+  valueOffset:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.1
+      inSlope: 26.511724
+      outSlope: 26.511724
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.012080407
+      value: 0.4202724
+      inSlope: 1.5420202
+      outSlope: 1.5420202
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.10266256
+      value: 0.5341563
+      inSlope: 3.9730363
+      outSlope: 3.9730363
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.1749682
+    - serializedVersion: 3
+      time: 0.15546465
+      value: 0.77001077
+      inSlope: 0.11672762
+      outSlope: 0.11672762
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.3755313
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.2498599
+      value: 0.9475158
+      inSlope: 0.6926011
+      outSlope: 0.6926011
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.53076416
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.4771272
+      value: 1.0062966
+      inSlope: -0.07307872
+      outSlope: -0.07307872
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.038589083
+    - serializedVersion: 3
+      time: 0.99523926
+      value: 0.9925842
+      inSlope: -0.026466101
+      outSlope: -0.026466101
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  cubeAmount: 100
+  cubeOffset: 1.2
+  sideScale: 0.3
+  timeToScale: 3
+  startFromSample: 0
+  samplesPerNote: 0
+  noteMat: {fileID: 2100000, guid: 59a07e0678d5dff4c88a21100f72ac03, type: 2}
+  isScaledWithOffset: 1
+  spawnFromCenter: 0
+--- !u!114 &2013166116746570375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2013166116746570383}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9c28f61b17278b4bbd093fbd605c265, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fftApplied: 1
+  fftFiltering: 0
+  lowShelfGain: 1
+  bandWidth: 1
+  filterFrequency: 0.1
+  fftScaleCoefficient: 10
+  noFFTRepeats: 1
+  visualPref: {fileID: 0}
+  soundSamples:
+    m_PersistentCalls:
+      m_Calls: []
+  buffSize: 0
