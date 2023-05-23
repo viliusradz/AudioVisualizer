@@ -18,7 +18,14 @@ public class InfinityCycler : MonoBehaviour
     public float inputMulti = 1000;
     public float changeDamp = 3;
 
+    public float cameraAxeleration = 3;
+    public float maxCameraAxel = 6;
+    public float minCameraAxel = 0.1f;
 
+    [Header("Scaling Params")]
+    public float scalePowTen = 4;
+
+    private float axelerationMulti = 1;
 
     FrequencyAnalizer analyze;
 
@@ -69,7 +76,7 @@ public class InfinityCycler : MonoBehaviour
             SpawnNewMesh();
         foreach (GameObject go in meshes)
         {
-            go.transform.localPosition = go.transform.localPosition + transform.right * forwardSpeed * Time.deltaTime;
+            go.transform.localPosition = go.transform.localPosition + transform.right * forwardSpeed* axelerationMulti * Time.deltaTime;
         }
     }
 
@@ -80,6 +87,10 @@ public class InfinityCycler : MonoBehaviour
 
     private void ApplyReversingAndConnecting(float[] buffer)
     {
+        CycleSpeed(buffer.Take(20000).ToArray());
+
+        buffer = ScaleBuffer(buffer);
+
         var time = Time.deltaTime;
         int i = 0;
         for (int k = 0; k < vertices.Length; k++)
@@ -104,6 +115,15 @@ public class InfinityCycler : MonoBehaviour
                 i++;
             }
         }
+    }
+
+    private float[] ScaleBuffer(float[] buffer)
+    {
+        for (int i = 0; i < buffer.Length; i++)
+        {
+            buffer[i] = buffer[i] * Mathf.Pow(10, scalePowTen);
+        }
+        return buffer;
     }
 
     private void SpawnNewMesh()
@@ -138,5 +158,17 @@ public class InfinityCycler : MonoBehaviour
             meshes.RemoveAt(0);
         }
 
+    }
+
+    private void CycleSpeed(float[] buffer)
+    {
+        float avg = 0;
+        for (int i = 0; i < buffer.Length; i++)
+        {
+            avg += buffer[i];
+        }
+        avg/= buffer.Length;
+        avg *= cameraAxeleration;
+        axelerationMulti = Mathf.Clamp(avg, minCameraAxel, maxCameraAxel);
     }
 }

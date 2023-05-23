@@ -456,6 +456,9 @@ MonoBehaviour:
   autoSize: 0
   inputMulti: 10000
   changeDamp: 3
+  cameraAxeleration: 10000
+  maxCameraAxel: 40
+  minCameraAxel: 10
   vertices: []
   reversedVertices: []
 --- !u!4 &654867617
