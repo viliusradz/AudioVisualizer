@@ -6,7 +6,6 @@ using System.Linq;
 using System.Xml;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.InputManagerEntry;
 
 [RequireComponent(typeof(MeshFilter))]
 public class MeshControl : MonoBehaviour
@@ -15,15 +14,18 @@ public class MeshControl : MonoBehaviour
     public bool revesedBuffer = false;
     public bool autoSize = false;
 
+    [HideInInspector]
+    public InfinityCycler cycler;
     //public float inputMulti = 100;
     //public float changeDamp = 3;
 
     Mesh mesh;
     Vector3[] vertices;
+    Vector3[] uvs;
     int[] triangles;
 
     private FrequencyAnalizer analyze;
-    private InfinityCycler cycler;
+    //private InfinityCycler cycler;
     private int xSize = 10;
     private int ySize = 10;
 
@@ -31,7 +33,6 @@ public class MeshControl : MonoBehaviour
     void Start()
     {
         //analyze = FrequencyAnalizer.inst;
-        cycler = InfinityCycler.inst;
         xSize = cycler.xSize;
         ySize =cycler.ySize;
 
@@ -39,6 +40,7 @@ public class MeshControl : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh;
         CreateShape();
         UpdateMesh();
+        mesh.SetUVs(0, uvs);
         GetComponent<MeshRenderer>().material = defMat;
     }
 
@@ -73,6 +75,16 @@ public class MeshControl : MonoBehaviour
                 tries += 6;
             }
             vert++;
+        }
+
+        uvs = new Vector3[vertices.Length];
+        int ind = 0;
+        for (int y = 0; y < ySize; y++)
+        {
+            for (int x = 0; x < xSize; x++)
+            {
+                uvs[ind] = new Vector3(x, y);
+            }
         }
 
     }

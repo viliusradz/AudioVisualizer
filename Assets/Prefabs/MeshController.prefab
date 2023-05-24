@@ -54,13 +54,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 106da47d3d21b4e4eb19bbe333ab7789, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defMat: {fileID: 2100000, guid: 2a261012a7b549941b2eb8ca861131b1, type: 2}
-  xSize: 400
-  ySize: 1000
+  defMat: {fileID: 2100000, guid: c51fb37932e39954b80562134d46ef4f, type: 2}
   revesedBuffer: 0
   autoSize: 0
-  inputMulti: 10000
-  changeDamp: 3
+  cycler: {fileID: 0}
 --- !u!23 &7845113750476420279
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -81,7 +78,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2a261012a7b549941b2eb8ca861131b1, type: 2}
+  - {fileID: 2100000, guid: c51fb37932e39954b80562134d46ef4f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

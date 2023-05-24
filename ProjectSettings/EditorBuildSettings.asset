@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MeshVisualizer.unity
+    guid: 0e73ae616f5b22141ae53f5c3e464292
+  - enabled: 1
     path: Assets/Scenes/CircularVisualizer.unity
     guid: 05a7edac628075e4cbe75d097aeacc64
   - enabled: 1

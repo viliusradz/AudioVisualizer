@@ -10,6 +10,7 @@ public class CameraHeightChange : MonoBehaviour
     public float heightChangeMulti = 100;
     public float exaduration = 2;
     public float maxHeight = 30;
+    public float damp = 3;
     public bool cameraChangeYHeight = true;
     private Camera cam;
     private Vector3 camStPos;
@@ -21,6 +22,7 @@ public class CameraHeightChange : MonoBehaviour
         analyze = FrequencyAnalizer.inst;
         cam = Camera.main;
         camStPos = cam.transform.position;
+        camStPos.y = cameraYHeight;
 
         analyze.soundSamples.AddListener(FrequencyAvg);
     }
@@ -33,10 +35,10 @@ public class CameraHeightChange : MonoBehaviour
             avg += buffer[i];
         }
         avg /= 20000f;
-        avg *= heightChangeMulti;
+        avg *= Mathf.Pow(10, heightChangeMulti);
         avg = Mathf.Pow(avg, exaduration);
         avg = Mathf.Clamp(avg, 0, maxHeight);
         var res = camStPos + Vector3.up* avg;
-        cam.transform.position = Vector3.Lerp(cam.transform.position, res, Time.deltaTime);
+        cam.transform.position = Vector3.Lerp(cam.transform.position, res, damp *Time.deltaTime);
     }
 }

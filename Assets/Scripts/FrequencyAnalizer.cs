@@ -71,6 +71,8 @@ public class FrequencyAnalizer : MonoBehaviour
             buffSize /= samplesDevideBy;
 
         soundIn.Start();
+
+        Application.targetFrameRate = 60;
     }
     private void Update()
     {

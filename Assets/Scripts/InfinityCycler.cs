@@ -1,15 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class InfinityCycler : MonoBehaviour
 {
-    public static InfinityCycler inst;
-
     public GameObject infiniPrefab;
+    public InfinRotation iRot;
+    public int spawnedMeshCount = 5;
     public float forwardSpeed = 10;
     public float meshOffset = 400;
     public int xSize = 10;
@@ -18,12 +18,16 @@ public class InfinityCycler : MonoBehaviour
     public float inputMulti = 1000;
     public float changeDamp = 3;
 
+    public float distanceFromCamera = 20;
+
     public float cameraAxeleration = 3;
+    public float axcelTimes = 1;
     public float maxCameraAxel = 6;
     public float minCameraAxel = 0.1f;
 
     [Header("Scaling Params")]
     public float scalePowTen = 4;
+    public AnimationCurve equalizer;
 
     private float axelerationMulti = 1;
 
@@ -35,16 +39,17 @@ public class InfinityCycler : MonoBehaviour
     public Vector3[] reversedVertices;
     private bool fliped = true;
     private List<GameObject> meshes = new List<GameObject>();
+
+    // pos change speed (dictated by WallDistanceCont)
+    private float posChangeDamp = 2;
+    // Start local position
+    private Vector3 stLocPos;
+    // pos to move towards
+    private Vector3 posTo = Vector3.zero;
     // Start is called before the first frame update
-    private void Awake()
-    {
-        if (inst == null)
-            inst = this;
-        else
-            Destroy(this);
-    }
     void Start()
     {
+        stLocPos = transform.localPosition;
         analyze = FrequencyAnalizer.inst;
         if (autoSize)
         {
@@ -64,81 +69,65 @@ public class InfinityCycler : MonoBehaviour
         {
             reversedVertices[i] = Vector3.zero;
         }
-
-        analyze.soundSamples.AddListener(UpdateValues);
+        SetPosition();
+        //analyze.soundSamples.AddListener(UpdateValues);
         SpawnNewMesh();
 
     }
+
     public void Update()
     {
         DestroyMesh();
-        if (meshes.Count < 3)
+        if (meshes.Count < spawnedMeshCount)
             SpawnNewMesh();
         foreach (GameObject go in meshes)
         {
-            go.transform.localPosition = go.transform.localPosition + transform.right * forwardSpeed* axelerationMulti * Time.deltaTime;
+            go.transform.localPosition = go.transform.localPosition - transform.right * forwardSpeed * axelerationMulti * Time.deltaTime;
         }
+        UpdateCyclesPos();
     }
 
-    private void UpdateValues(float[] buffer)
+    private void SetPosition()
     {
-        ApplyReversingAndConnecting(buffer);
+        if(iRot == InfinRotation.Up)
+            stLocPos = new Vector3(0, Camera.main.transform.localRotation.y - distanceFromCamera, -ySize / 2f);
+        else if(iRot == InfinRotation.Down)
+            stLocPos = new Vector3(0, Camera.main.transform.localRotation.y + distanceFromCamera, ySize / 2f);        
+        else if(iRot == InfinRotation.Left)
+            stLocPos = new Vector3(0, -ySize / 2f, distanceFromCamera);        
+        else if(iRot == InfinRotation.Right)
+            stLocPos = new Vector3(0, ySize / 2f, -distanceFromCamera);
+        transform.localPosition = stLocPos;
+        posTo = stLocPos;
     }
 
-    private void ApplyReversingAndConnecting(float[] buffer)
+    private void UpdateCyclesPos()
     {
-        CycleSpeed(buffer.Take(20000).ToArray());
-
-        buffer = ScaleBuffer(buffer);
-
-        var time = Time.deltaTime;
-        int i = 0;
-        for (int k = 0; k < vertices.Length; k++)
-        {
-            vertices[k].y = Mathf.Lerp(vertices[k].y, buffer[k] * inputMulti, changeDamp * time);
-        }
-        for (int y = 0; y <= ySize; y++)
-        {
-            int ind = i + xSize;
-            for (int x = 0; x <= xSize; x++)
-            {
-                reversedVertices[ind - x].y = Mathf.Lerp(reversedVertices[ind - x].y, buffer[i] * inputMulti, changeDamp * time);
-                reversedVertices[i].y = Mathf.Lerp(reversedVertices[i].y, buffer[ind - x] * inputMulti, changeDamp * time);
-                if (ind == i)
-                {
-                    for (int g = 0; g < 10; g++)
-                    {
-                        reversedVertices[i - g].y = vertices[i + g - xSize].y;
-                        reversedVertices[i + g - xSize].y = vertices[i - g].y;
-                    }
-                }
-                i++;
-            }
-        }
+        transform.localPosition = Vector3.Lerp(transform.localPosition, posTo, posChangeDamp * Time.deltaTime);
     }
 
-    private float[] ScaleBuffer(float[] buffer)
-    {
-        for (int i = 0; i < buffer.Length; i++)
-        {
-            buffer[i] = buffer[i] * Mathf.Pow(10, scalePowTen);
-        }
-        return buffer;
-    }
 
     private void SpawnNewMesh()
     {
         if (meshes.Count == 0)
         {
-            meshes.Add(Instantiate(infiniPrefab, transform.position + transform.forward * meshOffset * meshes.Count, Quaternion.identity, transform));
+            var res = Instantiate(infiniPrefab, transform.localPosition + transform.forward * meshOffset * meshes.Count, transform.rotation, transform);
+            res.GetComponent<MeshControl>().cycler = this;
+            RotateCycler(res.transform);
+
+            meshes.Add(res);
             fliped = false;
         }
         else
         {
             var pos = Vector3.zero;
-            pos.z += meshes.Last().transform.localPosition.z + meshOffset;
-            var res = Instantiate(infiniPrefab, pos, Quaternion.identity, transform);
+            pos.x += meshes.Last().transform.localPosition.x + meshOffset;
+            var res = Instantiate(infiniPrefab, pos, transform.rotation, transform);
+
             res.transform.localPosition = pos;
+            res.GetComponent<MeshControl>().cycler = this;
+            RotateCycler(res.transform);
+
             if (!fliped)
             {
                 res.GetComponent<MeshControl>().revesedBuffer = true;
@@ -150,9 +139,18 @@ public class InfinityCycler : MonoBehaviour
             meshes.Add(res);
         }
     }
+    private void RotateCycler(Transform mesh)
+    {
+        if (iRot == InfinRotation.Down)
+            mesh.Rotate(Vector3.right, 180);
+        else if (iRot == InfinRotation.Right)
+            mesh.Rotate(Vector3.right, 90);
+        else if (iRot == InfinRotation.Left)
+            mesh.Rotate(Vector3.right, 270);
+    }
     private void DestroyMesh()
     {
-        if (meshes[0].transform.localPosition.z + meshOffset < 0)
+        if (meshes[0].transform.localPosition.x + meshOffset < 0)
         {
             Destroy(meshes.First());
             meshes.RemoveAt(0);
@@ -160,15 +158,31 @@ public class InfinityCycler : MonoBehaviour
 
     }
 
-    private void CycleSpeed(float[] buffer)
+    public void OffsetPosition(float offset)
     {
-        float avg = 0;
-        for (int i = 0; i < buffer.Length; i++)
-        {
-            avg += buffer[i];
-        }
-        avg/= buffer.Length;
-        avg *= cameraAxeleration;
-        axelerationMulti = Mathf.Clamp(avg, minCameraAxel, maxCameraAxel);
+        if (iRot == InfinRotation.Up)
+            posTo.y = stLocPos.y - offset;
+        else if (iRot == InfinRotation.Down)
+            posTo.y = stLocPos.y + offset;
+        else if (iRot == InfinRotation.Left)
+            posTo.z = stLocPos.z + offset;
+        else if (iRot == InfinRotation.Right)
+            posTo.z = stLocPos.z - offset;
+    }
+
+    public void SetValues(Vector3[] ver, Vector3[] rVer, float axcel)
+    {
+        vertices = ver;
+        reversedVertices = rVer;
+        axelerationMulti = axcel;
+    }
+
+    public enum InfinRotation
+    {
+        Up,
+        Down,
+        Left,
+        Right
     }
 }
+
