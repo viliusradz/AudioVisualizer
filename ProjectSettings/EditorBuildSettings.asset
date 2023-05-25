@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/LineVisualizer.unity
     guid: 2c31f21c963e7e04aa6bcf8c7a3220b2
   - enabled: 1
+    path: Assets/Scenes/SquigglyVisualizer.unity
+    guid: 0468895d9e3f324438e90b7c5e0bdfec
+  - enabled: 1
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects: {}
