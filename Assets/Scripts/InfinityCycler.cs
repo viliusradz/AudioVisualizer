@@ -10,6 +10,7 @@ public class InfinityCycler : MonoBehaviour
     public GameObject infiniPrefab;
     public InfinRotation iRot;
     public int spawnedMeshCount = 5;
+    public float meshStartPos = 1000;
     public float forwardSpeed = 10;
     public float meshOffset = 400;
     public int xSize = 10;
@@ -111,7 +112,7 @@ public class InfinityCycler : MonoBehaviour
     {
         if (meshes.Count == 0)
         {
-            var res = Instantiate(infiniPrefab, transform.localPosition + transform.forward * meshOffset * meshes.Count, transform.rotation, transform);
+            var res = Instantiate(infiniPrefab, transform.localPosition + transform.forward * meshOffset * meshes.Count+Vector3.right*meshStartPos, transform.rotation, transform);
             res.GetComponent<MeshControl>().cycler = this;
             RotateCycler(res.transform);
 
