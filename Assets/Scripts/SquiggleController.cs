@@ -11,6 +11,8 @@ public class SquiggleController : MonoBehaviour
     public AnimationCurve equalizer;
     public float valueMulti = 3;
     public float damp = 3;
+    public bool shapeChange = true;
+    public float maxOut = 30f;
 
     [Header("CircularLayout")]
     public float range = 30;
@@ -42,7 +44,7 @@ public class SquiggleController : MonoBehaviour
         {
             case 0:
                 setShape = Shapes.Circle;
-                CircleLayout(); 
+                CircleLayout();
                 break;
         }
     }
@@ -57,7 +59,7 @@ public class SquiggleController : MonoBehaviour
     private void DrawSquiggle(float[] buffer)
     {
 
-        if (setShape == Shapes.Circle)
+        if (setShape == Shapes.Circle && shapeChange)
         {
             float newDist = 0;
             int index = 0;
@@ -69,15 +71,39 @@ public class SquiggleController : MonoBehaviour
                         newDist = range + buffer[i] * Mathf.Pow(10, valueMulti) * equalizer.Evaluate((float)i / linePoints);
                     else if (z == 1)
                         newDist = range + buffer[(squigglePos.Length / 2) - i] * Mathf.Pow(10, valueMulti) * equalizer.Evaluate((float)(squigglePos.Length / 2 - i) / linePoints);
+                    newDist = Mathf.Clamp(newDist, 0, maxOut);
                     var rad = deg * index * Mathf.Deg2Rad;
                     var x = Mathf.Cos(rad) * newDist;
                     var y = Mathf.Sin(rad) * newDist;
                     if (animInvard)
-                        squigglePos[index] = startSquigglePos[index] - Vector3.up * y - Vector3.right * x;
+                        squigglePos[index] = startSquigglePos[index] - Vector3.up * (y - range) - Vector3.right * (x - range);
                     else
                         squigglePos[index] = startSquigglePos[index] + Vector3.up * y + Vector3.right * x;
                     index++;
                 }
+            }
+        }
+        else
+        {
+            float newDist = 0;
+            float avg = 0;
+            for (int i = 0; i < 20000; i++)
+            {
+                avg += buffer[i];
+            }
+            avg /= 20000f;
+            avg *= MathF.Pow(10, valueMulti);
+            for (int i = 0; i < squigglePos.Length; i++)
+            {
+                if (animInvard)
+                    newDist = range - avg;
+                else
+                    newDist = range + avg;
+                var rad = deg * i * Mathf.Deg2Rad;
+                var x = Mathf.Cos(rad) * newDist;
+                var y = Mathf.Sin(rad) * newDist;
+                squigglePos[i] = startSquigglePos[i] + Vector3.up * y + Vector3.right * x;
+                i++;
             }
         }
 
