@@ -11,23 +11,16 @@ using System;
 using CSCore.Utils;
 using CSCore.DSP;
 using System.Linq;
-//using System.Numerics;
-//using Complex = System.Numerics.Complex;
-// AudioListener.GetSpectrumData(spectrum, 0, FFTWindow.Blackman);
-//https://github.com/filoe/cscore
-//^very powerfull audio libruary
-//https://github.com/hallidev/UnityWASAPILoopbackAudio
-//^project with the libruary
 
 
 public class FrequencyAnalizer : MonoBehaviour
 {
     public bool fftApplied = true;
-    [Header("Filtering")]
-    public bool fftFiltering = false;
-    public float lowShelfGain = 1f;
-    public float bandWidth = 1f;
-    public float filterFrequency = 0.1f;
+    //[Header("Filtering")]
+    ////public bool fftFiltering = false;
+    //public float lowShelfGain = 1f;
+    //public float bandWidth = 1f;
+    //public float filterFrequency = 0.1f;
     public float fftScaleCoefficient = 100;
 
 
@@ -48,7 +41,6 @@ public class FrequencyAnalizer : MonoBehaviour
     private int sampleExpo = 10;
 
     private int samplesDevideBy = 4;
-    int index = 0;
     int lastBuffer = 0;
 
     private void Awake()
@@ -64,7 +56,7 @@ public class FrequencyAnalizer : MonoBehaviour
         sampleSource = soundSource.ToSampleSource();
 
         buffSize = (int)Math.Floor(Math.Log(sampleSource.WaveFormat.SampleRate * sampleSource.WaveFormat.Channels, 2));
-        buffSize =(int) Math.Pow(2, buffSize);
+        buffSize = (int)Math.Pow(2, buffSize);
         if (noFFTRepeats)
             buffSize /= samplesDevideBy;
 
@@ -76,7 +68,6 @@ public class FrequencyAnalizer : MonoBehaviour
     {
         sampleExpo = (int)Math.Floor(Math.Log(sampleSource.WaveFormat.SampleRate * sampleSource.WaveFormat.Channels, 2));
         var buffer = new float[(int)MathF.Pow(2, sampleExpo)];
-        //var buffer = new float[sampleSource.WaveFormat.SampleRate * sampleSource.WaveFormat.Channels];
         if (buffer.Length != lastBuffer)
         {
             data = new Complex[(int)Math.Pow(2, sampleExpo)];
@@ -108,13 +99,6 @@ public class FrequencyAnalizer : MonoBehaviour
 
     private void ApplyFFT(float[] buffer)
     {
-
-        index = 0;
-        //foreach (var val in buffer)
-        //{
-        //    data[index].Real = val;
-        //    index++;
-        //}
         for (int i = 0; i < data.Length; i++)
         {
             data[i].Real = buffer[i];
@@ -134,40 +118,40 @@ public class FrequencyAnalizer : MonoBehaviour
                 dataFloat[i] = data[i] * fftScaleCoefficient;
             }
         }
-        if (fftFiltering)
-        {
-            //FilterData(dataFloat, sampleSource.WaveFormat.SampleRate, filterFrequency);
-            //FilterData1(dataFloat, sampleSource.WaveFormat.SampleRate, filterFrequency, lowShelfGain);
-            //FilterData2(dataFloat, (int)Math.Pow(2, sampleExpo), filterFrequency, bandWidth, lowShelfGain);
-            //FilterData3(dataFloat, sampleSource.WaveFormat.SampleRate, filterFrequency);
-            //FilterData4(dataFloat, (int)Math.Pow(2, sampleExpo), filterFrequency, lowShelfGain);
-        }
+        //if (fftFiltering)
+        //{
+        //FilterData(dataFloat, sampleSource.WaveFormat.SampleRate, filterFrequency);
+        //FilterData1(dataFloat, sampleSource.WaveFormat.SampleRate, filterFrequency, lowShelfGain);
+        //FilterData2(dataFloat, (int)Math.Pow(2, sampleExpo), filterFrequency, bandWidth, lowShelfGain);
+        //FilterData3(dataFloat, sampleSource.WaveFormat.SampleRate, filterFrequency);
+        //FilterData4(dataFloat, (int)Math.Pow(2, sampleExpo), filterFrequency, lowShelfGain);
+        //    }
     }
-    private static void FilterData(float[] data,int sampleRate, float frequency)
-    {
-        LowpassFilter filter = new LowpassFilter(sampleRate, (double)frequency);
-        filter.Process(data);
-    }    
-    private static void FilterData1(float[] data,int sampleRate, float frequency, float gain)
-    {
-        LowShelfFilter filter = new LowShelfFilter(sampleRate, (double)frequency,(double) gain);
-        filter.Process(data);
-    }    
-    private static void FilterData2(float[] data,int sampleRate, float frequency,float bandwidth, float gain)
-    {
-        PeakFilter filter = new PeakFilter(sampleRate, (double)frequency,(double) bandwidth,(double) gain);
-        filter.Process(data);
-    }    
-    private static void FilterData3(float[] data,int sampleRate, float frequency)
-    {
-        NotchFilter filter = new NotchFilter(sampleRate, (double)frequency);
-        filter.Process(data);
-    }
-    private static void FilterData4(float[] data, int sampleRate, float frequency, float gain)
-    {
-        HighShelfFilter filter = new HighShelfFilter(sampleRate, (double)frequency, (double)gain);
-        filter.Process(data);
-    }
+    //private static void FilterData(float[] data,int sampleRate, float frequency)
+    //{
+    //    LowpassFilter filter = new LowpassFilter(sampleRate, (double)frequency);
+    //    filter.Process(data);
+    //}    
+    //private static void FilterData1(float[] data,int sampleRate, float frequency, float gain)
+    //{
+    //    LowShelfFilter filter = new LowShelfFilter(sampleRate, (double)frequency,(double) gain);
+    //    filter.Process(data);
+    //}    
+    //private static void FilterData2(float[] data,int sampleRate, float frequency,float bandwidth, float gain)
+    //{
+    //    PeakFilter filter = new PeakFilter(sampleRate, (double)frequency,(double) bandwidth,(double) gain);
+    //    filter.Process(data);
+    //}    
+    //private static void FilterData3(float[] data,int sampleRate, float frequency)
+    //{
+    //    NotchFilter filter = new NotchFilter(sampleRate, (double)frequency);
+    //    filter.Process(data);
+    //}
+    //private static void FilterData4(float[] data, int sampleRate, float frequency, float gain)
+    //{
+    //    HighShelfFilter filter = new HighShelfFilter(sampleRate, (double)frequency, (double)gain);
+    //    filter.Process(data);
+    //}
 
     //public static Complex[] FFT(float[] signal)
     //{

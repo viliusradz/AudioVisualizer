@@ -43,7 +43,7 @@ public class VisualBrain : MonoBehaviour
     Vector3 stPos;
     float normScale = 0;
     Material noteMat;
-    private float currentTime = 0;
+
     public void CubeChangeParams()
     {
         newScale = new(sideScale, 1, sideScale);
@@ -81,22 +81,12 @@ public class VisualBrain : MonoBehaviour
         }
         normScale = Mathf.Clamp01((transform.localScale.y - minScale) / ((maxScale/maxScaleLessor)- minScale));
 
-        //noteMat.color = Mathf.CorrelatedColorTemperatureToRGB(Mathf.Clamp(normScale*1000, 1000,40000));
         if (colorChange)
         {
-            //float gr = Mathf.Clamp01(MathF.Sin(MathF.Pow(normScale, 2)) + normScale);
-            //float bl = Mathf.Clamp01(-Mathf.Pow(normScale, 3) + MathF.Pow(normScale, 2) + 2 * normScale);
-            //noteMat.color = new Color(1 - Mathf.Clamp(gr, 0.45f, 1f), .4f, Mathf.Clamp(bl, 0.2f, 1f));
             noteMat.color = GenerateColorOnSound(normScale);
-            //if (currentTime + changeInterval/(newScale.y/10) < Time.time)
-            //{
-            //    noteMat.color = Color.Lerp(ChangeColorValue(noteMat.color, colorJumInterval),noteMat.color, 1 *Time.deltaTime);
-            //    currentTime = Time.time;
-            //}
         }
         else
             noteMat.color = Color.gray;
-        //noteMat.color = new Color(Mathf.Clamp01(gr-0.1f), Mathf.PerlinNoise(gr, bl + 0.1f), bl);
 
         if (isWithOffset)
             transform.localPosition = transform.localScale / 2 + stPos;
