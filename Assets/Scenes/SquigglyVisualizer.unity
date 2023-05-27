@@ -205,7 +205,6 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
   - {fileID: 2100000, guid: a95f34008cb40334c87002893a497d97, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -229,7 +228,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: -3.19, y: 0, z: 1}
+  - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -647,7 +646,6 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
   - {fileID: 2100000, guid: a95f34008cb40334c87002893a497d97, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -671,7 +669,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: -3.19, y: 0, z: 1}
+  - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -872,10 +870,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fftApplied: 1
-  fftFiltering: 0
-  lowShelfGain: 1
-  bandWidth: 1
-  filterFrequency: 0.1
   fftScaleCoefficient: 10
   noFFTRepeats: 1
   soundSamples:

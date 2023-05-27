@@ -36,10 +36,8 @@ public class AudioController : MonoBehaviour
     {
         analizer = FrequencyAnalizer.inst;
         analizer.soundSamples.AddListener(UpdateVisuals);
-        if (samplesPerNote < 0)
-            samplesPerVisual = (int)(analizer.buffSize - analizer.buffSize * 0.001f) / cubeAmount;
-        else if (samplesPerNote == 0)
-            samplesPerVisual = analizer.buffSize / cubeAmount;
+        if (samplesPerNote <= 0)
+            samplesPerVisual = 20000 / cubeAmount;
         else
             samplesPerVisual = samplesPerNote;
         var pos = transform.position;
@@ -90,7 +88,7 @@ public class AudioController : MonoBehaviour
                 {
                     hightestValue = buff[currInd];
                 }
-                total += (buff[currInd] / hightestValue) * valueOffset.Evaluate(cubeIndex / cubeAmount);
+                total += (buff[currInd] / hightestValue) * valueOffset.Evaluate((float)currInd / 20000);
                 //total += (buff[currInd] / hightestValue) * valueOffset.Evaluate(currInd / cubeAmount) * cubeConfig[cube].valueMulti;
                 currInd++;
             }
