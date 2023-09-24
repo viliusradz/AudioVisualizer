@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MeshVisualizer.unity
     guid: 0e73ae616f5b22141ae53f5c3e464292
+  - enabled: 1
+    path: Assets/Scenes/ClockVisualizer.unity
+    guid: 70d81e3e72ffa554d86217e52216d659
   m_configObjects: {}

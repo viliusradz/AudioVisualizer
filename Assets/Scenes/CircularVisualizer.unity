@@ -542,7 +542,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxRotationSpeed: 1000
   rotationSpeed: 120
-  exadurationMulti: 3
+  exadurationMulti: 4
   orderIndex: 2
   reverseSpin: 1
   inverseAtPoint: 1
@@ -766,7 +766,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxRotationSpeed: 1000
   rotationSpeed: 120
-  exadurationMulti: 3
+  exadurationMulti: 4
   orderIndex: 6
   reverseSpin: 0
   inverseAtPoint: 0
@@ -990,7 +990,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxRotationSpeed: 1000
   rotationSpeed: 120
-  exadurationMulti: 3
+  exadurationMulti: 4
   orderIndex: 3
   reverseSpin: 1
   inverseAtPoint: 1
@@ -1167,7 +1167,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxRotationSpeed: 1000
   rotationSpeed: 120
-  exadurationMulti: 3
+  exadurationMulti: 4
   orderIndex: 1
   reverseSpin: 1
   inverseAtPoint: 1
@@ -1245,7 +1245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxRotationSpeed: 1000
   rotationSpeed: 120
-  exadurationMulti: 3
+  exadurationMulti: 4
   orderIndex: 8
   reverseSpin: 0
   inverseAtPoint: 0
@@ -1315,7 +1315,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxRotationSpeed: 1000
   rotationSpeed: 120
-  exadurationMulti: 3
+  exadurationMulti: 4
   orderIndex: 11
   reverseSpin: 1
   inverseAtPoint: 0
@@ -1462,7 +1462,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxRotationSpeed: 1000
   rotationSpeed: 120
-  exadurationMulti: 3
+  exadurationMulti: 4
   orderIndex: 4
   reverseSpin: 0
   inverseAtPoint: 0
