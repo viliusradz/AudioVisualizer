@@ -5,15 +5,18 @@ using UnityEngine;
 
 public class ClockController : MonoBehaviour
 {
-    public GameObject secArrow;
-    public GameObject minArrow;
-    public GameObject hourArrow;
+    public ArrowObject secArrow;
+    public ArrowObject minArrow;
+    public ArrowObject hourArrow;
     public GameObject hIndicator;
     public GameObject quaterIndicator;
     public Transform indicatorHolder;
     [Header("Indicator settings")]
     public float markDistance = 15;
     public float errorBounds = 2f;
+    public bool startAnimation = true;
+    public float startAnimationSpeed = 0.05f;
+    public float startAnimationPosition = 1f;
 
     private float degChangeSec = -6;
     private float degChangeMin = -6;
@@ -26,6 +29,12 @@ public class ClockController : MonoBehaviour
     {
         CreateMarks();
         UpdateArrowPosition();
+        if(startAnimation)
+        {
+            secArrow.arrowControl.StartArrowAnimation(startAnimationSpeed, Vector3.zero);
+            minArrow.arrowControl.StartArrowAnimation(startAnimationSpeed, Vector3.zero);
+            hourArrow.arrowControl.StartArrowAnimation(startAnimationSpeed, Vector3.zero);
+        }
     }
 
     void Update()
@@ -36,7 +45,7 @@ public class ClockController : MonoBehaviour
 
     private void IndicatorAnimation()
     {
-        float rotZ = 360 - secArrow.transform.rotation.eulerAngles.z;
+        float rotZ = 360 - secArrow.arrowHolder.rotation.eulerAngles.z;
         foreach (var indicator in indicators)
         {
             if (rotZ > indicator.angleZ - errorBounds && rotZ < indicator.angleZ + errorBounds)
@@ -48,10 +57,11 @@ public class ClockController : MonoBehaviour
     private void UpdateArrowPosition()
     {
         var time = DateTime.Now;
-        secArrow.transform.rotation = Quaternion.Euler(0, 0, degChangeSec * time.Second + (degChangeSec / 1000f) * time.Millisecond);
-        minArrow.transform.rotation = Quaternion.Euler(0, 0, degChangeMin * time.Minute + (degChangeMin / 60f) * time.Second);
-        hourArrow.transform.rotation = Quaternion.Euler(0, 0, degHChange * time.Hour + (degHChange / 60) * time.Minute);
+        secArrow.arrowHolder.rotation = Quaternion.Euler(0, 0, degChangeSec * time.Second + (degChangeSec / 1000f) * time.Millisecond);
+        minArrow.arrowHolder.rotation = Quaternion.Euler(0, 0, degChangeMin * time.Minute + (degChangeMin / 60f) * time.Second);
+        hourArrow.arrowHolder.rotation = Quaternion.Euler(0, 0, degHChange * time.Hour + (degHChange / 60) * time.Minute);
     }
+
 
     private void CreateMarks()
     {
@@ -62,13 +72,25 @@ public class ClockController : MonoBehaviour
             var rot = Quaternion.Euler(new Vector3(0, 0, degChangeMin * i));
             if (i % 5 != 0)
             {
-                res = Instantiate(quaterIndicator, pos, rot, indicatorHolder);
+                res = Instantiate(quaterIndicator, indicatorHolder.position, rot, indicatorHolder);
             }
             else
-                res = Instantiate(hIndicator, pos, rot, indicatorHolder);
+                res = Instantiate(hIndicator, indicatorHolder.position, rot, indicatorHolder);
             var indi = res.GetComponent<Indicator>();
             indi.SetParameters(-degChangeMin * i, res.transform.localScale);
+            if (startAnimation)
+                indi.StartAnimation(startAnimation, startAnimationSpeed,
+                    new Vector3(Mathf.Sin(-degChangeMin * i * Mathf.Deg2Rad) * startAnimationPosition, Mathf.Cos(-degChangeMin * i * Mathf.Deg2Rad) * startAnimationPosition, 0),
+                    pos);
+            else
+                indi.StartAnimation(startAnimation, startAnimationSpeed, pos, pos);
             indicators.Add(indi);
         }
     }
+}
+[System.Serializable]
+public class ArrowObject
+{
+    public Transform arrowHolder;
+    public Arrow arrowControl;
 }

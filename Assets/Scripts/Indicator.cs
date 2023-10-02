@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class Indicator : MonoBehaviour
@@ -17,13 +18,17 @@ public class Indicator : MonoBehaviour
     public Color changeColor = Color.white;
 
     private Vector3 startScale;
+    private Vector3 pos;
+    private bool loadAnimation = false;
+    private float loadSpeed = 1;
+    private Vector3 endScale;
 
     private Material material;
     private Color startColor;
     private bool animationCalled = false;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         material = GetComponent<Renderer>().material;
         material = new Material(material);
@@ -40,6 +45,8 @@ public class Indicator : MonoBehaviour
             ColorAnimation();
         if (!expand && !colorChange)
             animationCalled = false;
+        if(loadAnimation)
+            StartAnimationUpdate();
     }
 
     public void SetParameters(float angl, Vector3 scale)
@@ -47,6 +54,20 @@ public class Indicator : MonoBehaviour
         angleZ = angl;
         transform.localScale = scale;
         startScale = transform.localScale;
+    }
+
+    public void StartAnimation(bool animation, float speed, Vector3 stPos, Vector3 endPos)
+    {
+        if (animation)
+        {
+            loadAnimation = true;
+            endScale = transform.localScale;
+            transform.localScale = Vector3.zero;
+
+        }
+        transform.position = stPos;
+        pos =endPos;
+        loadSpeed = speed; 
     }
 
     public void Animation()
@@ -60,6 +81,14 @@ public class Indicator : MonoBehaviour
 
             animationCalled = true;
         }
+    }
+
+    private void StartAnimationUpdate()
+    {
+        transform.position = Vector3.Lerp(transform.position, pos, loadSpeed*Time.deltaTime);
+        transform.localScale = Vector3.Lerp(transform.localScale, endScale, loadSpeed*Time.deltaTime);
+        if (transform.position == pos && transform.localScale == endScale)
+            loadAnimation = false;
     }
 
     private void ColorAnimation()

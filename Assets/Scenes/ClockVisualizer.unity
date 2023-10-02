@@ -152,9 +152,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6d8f429e74da104f9fb7d6ecdf1272f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  secArrow: {fileID: 2079339156}
-  minArrow: {fileID: 1767353616}
-  hourArrow: {fileID: 1812359579}
+  secArrow:
+    arrowHolder: {fileID: 2079339157}
+    arrowControl: {fileID: 1506373519}
+  minArrow:
+    arrowHolder: {fileID: 1767353617}
+    arrowControl: {fileID: 566520340}
+  hourArrow:
+    arrowHolder: {fileID: 1812359580}
+    arrowControl: {fileID: 1807820410}
   hIndicator: {fileID: 8597024185830565063, guid: 4b46b26f2fc68ad4e9f228ce82614a83,
     type: 3}
   quaterIndicator: {fileID: 8480895374512085768, guid: fb3f540555a697e43802646873b5bbf3,
@@ -162,6 +168,9 @@ MonoBehaviour:
   indicatorHolder: {fileID: 1166368140}
   markDistance: 15
   errorBounds: 2
+  startAnimation: 1
+  startAnimationSpeed: 0.4
+  startAnimationPosition: 30
 --- !u!4 &93134780
 Transform:
   m_ObjectHideFlags: 0
@@ -582,6 +591,7 @@ GameObject:
   - component: {fileID: 566520339}
   - component: {fileID: 566520338}
   - component: {fileID: 566520337}
+  - component: {fileID: 566520340}
   m_Layer: 0
   m_Name: MinArrow (1)
   m_TagString: Untagged
@@ -667,6 +677,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 566520335}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &566520340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 566520335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 258c2c252f17e9b44a061f41a31aeeb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &703432514
 GameObject:
   m_ObjectHideFlags: 0
@@ -897,6 +919,7 @@ GameObject:
   - component: {fileID: 1506373517}
   - component: {fileID: 1506373516}
   - component: {fileID: 1506373518}
+  - component: {fileID: 1506373519}
   m_Layer: 0
   m_Name: SecondArrow
   m_TagString: Untagged
@@ -1077,6 +1100,18 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &1506373519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1506373513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 258c2c252f17e9b44a061f41a31aeeb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1767353616
 GameObject:
   m_ObjectHideFlags: 0
@@ -1121,6 +1156,7 @@ GameObject:
   - component: {fileID: 1807820409}
   - component: {fileID: 1807820408}
   - component: {fileID: 1807820407}
+  - component: {fileID: 1807820410}
   m_Layer: 0
   m_Name: HourArrow (2)
   m_TagString: Untagged
@@ -1206,6 +1242,18 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1807820405}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1807820410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1807820405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 258c2c252f17e9b44a061f41a31aeeb6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1812359579
 GameObject:
   m_ObjectHideFlags: 0
