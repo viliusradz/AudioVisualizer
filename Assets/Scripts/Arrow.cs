@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
-    private float animSpeed = 1;
+    private float animSpeed = 3;
     private Vector3 scale;
     private Vector3 stScale;
     private Vector3 endpos;
@@ -23,16 +23,17 @@ public class Arrow : MonoBehaviour
     {
         scale = transform.localScale;
         endpos = transform.localPosition;
-        transform.localPosition = new(transform.localPosition.x, transform.localPosition.y - transform.localScale.y/2, transform.localPosition.z);
+        transform.localPosition = new(transform.localPosition.x, transform.localPosition.y - transform.localScale.y / 2, transform.localPosition.z);
         transform.localScale = startScale;
         animSpeed = speed;
         stAnim = true;
     }
+    
     private void StartAnimationUpdate()
     {
         transform.localScale = Vector3.Lerp(transform.localScale, scale, animSpeed * Time.deltaTime);
-        transform.transform.position = Vector3.Lerp(transform.localPosition, endpos, animSpeed * Time.deltaTime);
-        if (transform.localScale == scale)
+        transform.localPosition = Vector3.Lerp(transform.localPosition, endpos, animSpeed * Time.deltaTime);
+        if (transform.localScale == scale && transform.position == endpos)
             stAnim = false;
     }
 }

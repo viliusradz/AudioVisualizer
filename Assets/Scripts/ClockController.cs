@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using UnityEngine;
 
 public class ClockController : MonoBehaviour
@@ -22,11 +23,18 @@ public class ClockController : MonoBehaviour
     private float degChangeMin = -6;
     private float degHChange = -360 / 12f;
 
+    [Header("Clock spin effect")]
+    public int minSample = 0;
+    public int maxSample = 20000;
+    public float tenToPower = 3;
+
     private List<Indicator> indicators = new();
 
     // Start is called before the first frame update
     void Start()
     {
+        FrequencyAnalizer.inst.soundSamples.AddListener(SpinClockOnMusic);
+
         CreateMarks();
         UpdateArrowPosition();
         if(startAnimation)
@@ -37,6 +45,7 @@ public class ClockController : MonoBehaviour
         }
     }
 
+
     void Update()
     {
         UpdateArrowPosition();
@@ -45,7 +54,7 @@ public class ClockController : MonoBehaviour
 
     private void IndicatorAnimation()
     {
-        float rotZ = 360 - secArrow.arrowHolder.rotation.eulerAngles.z;
+        float rotZ = 360 - secArrow.arrowHolder.localRotation.eulerAngles.z;
         foreach (var indicator in indicators)
         {
             if (rotZ > indicator.angleZ - errorBounds && rotZ < indicator.angleZ + errorBounds)
@@ -57,9 +66,9 @@ public class ClockController : MonoBehaviour
     private void UpdateArrowPosition()
     {
         var time = DateTime.Now;
-        secArrow.arrowHolder.rotation = Quaternion.Euler(0, 0, degChangeSec * time.Second + (degChangeSec / 1000f) * time.Millisecond);
-        minArrow.arrowHolder.rotation = Quaternion.Euler(0, 0, degChangeMin * time.Minute + (degChangeMin / 60f) * time.Second);
-        hourArrow.arrowHolder.rotation = Quaternion.Euler(0, 0, degHChange * time.Hour + (degHChange / 60) * time.Minute);
+        secArrow.arrowHolder.localRotation = Quaternion.Euler(0, 0, degChangeSec * time.Second + (degChangeSec / 1000f) * time.Millisecond);
+        minArrow.arrowHolder.localRotation = Quaternion.Euler(0, 0, degChangeMin * time.Minute + (degChangeMin / 60f) * time.Second);
+        hourArrow.arrowHolder.localRotation = Quaternion.Euler(0, 0, degHChange * time.Hour + (degHChange / 60) * time.Minute);
     }
 
 
@@ -87,6 +96,19 @@ public class ClockController : MonoBehaviour
             indicators.Add(indi);
         }
     }
+
+    private void SpinClockOnMusic(float[] buff)
+    {
+        float avg = 0;
+        for (int i = minSample; i < maxSample; i++)
+        {
+            avg += buff[i];
+        }
+        avg /= maxSample - minSample;
+
+        transform.Rotate(Vector3.forward, -avg*Mathf.Pow(10f,tenToPower));
+    }
+
 }
 [System.Serializable]
 public class ArrowObject

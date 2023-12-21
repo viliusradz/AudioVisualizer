@@ -65,7 +65,7 @@ public class Indicator : MonoBehaviour
             transform.localScale = Vector3.zero;
 
         }
-        transform.position = stPos;
+        transform.localPosition = stPos;
         pos =endPos;
         loadSpeed = speed; 
     }
@@ -85,7 +85,7 @@ public class Indicator : MonoBehaviour
 
     private void StartAnimationUpdate()
     {
-        transform.position = Vector3.Lerp(transform.position, pos, loadSpeed*Time.deltaTime);
+        transform.localPosition = Vector3.Lerp(transform.localPosition, pos, loadSpeed*Time.deltaTime);
         transform.localScale = Vector3.Lerp(transform.localScale, endScale, loadSpeed*Time.deltaTime);
         if (transform.position == pos && transform.localScale == endScale)
             loadAnimation = false;
