@@ -1,12 +1,5 @@
 {
   "dependencies": {
-    "com.github-glitchenzo.nugetforunity": {
-      "version": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "2a728b401a9f7687dffec4f354e27ddd3d613fa5"
-    },
     "com.unity.burst": {
       "version": "1.7.3",
       "depth": 1,
@@ -42,7 +35,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.16",
+      "version": "2.0.21",
       "depth": 0,
       "source": "registry",
       "dependencies": {

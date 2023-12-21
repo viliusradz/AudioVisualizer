@@ -99,6 +99,7 @@ public class Indicator : MonoBehaviour
     }
     private void ScaleAnimation()
     {
+        if (animationCalled) return;
         if (!expanded)
             transform.localScale = Vector3.Lerp(transform.localScale, startScale * expandedScale, expandSpeed * Time.deltaTime);
         else
