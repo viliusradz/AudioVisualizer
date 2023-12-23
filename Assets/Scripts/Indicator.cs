@@ -26,6 +26,8 @@ public class Indicator : MonoBehaviour
     private Material material;
     private Color startColor;
     private bool animationCalled = false;
+    private float animationDelay = 2;
+    private float lastAnimation = 0;
 
     // Start is called before the first frame update
     void Awake()
@@ -72,7 +74,7 @@ public class Indicator : MonoBehaviour
 
     public void Animation()
     {
-        if (!animationCalled)
+        if (animationDelay + lastAnimation < Time.time)
         {
             changeColor = Color.white;
             material.color = changeColor;
@@ -80,6 +82,8 @@ public class Indicator : MonoBehaviour
             colorChange = true;
 
             animationCalled = true;
+
+            lastAnimation = Time.time;
         }
     }
 

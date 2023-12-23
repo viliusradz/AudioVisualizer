@@ -100,5 +100,5 @@ MonoBehaviour:
   expandSpeed: 7
   expandedScale: 2
   contractSpeed: 1
-  colorSpeed: 0.3
+  colorSpeed: 0.2
   changeColor: {r: 0.6981132, g: 0.36547095, b: 0.14159843, a: 1}

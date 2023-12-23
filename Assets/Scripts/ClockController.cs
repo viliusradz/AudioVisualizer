@@ -12,6 +12,10 @@ public class ClockController : MonoBehaviour
     public GameObject hIndicator;
     public GameObject quaterIndicator;
     public Transform indicatorHolder;
+
+    [Header("Hour Representation")]
+    public List<Transform> hourText;
+
     [Header("Indicator settings")]
     public float markDistance = 15;
     public float errorBounds = 2f;
@@ -27,6 +31,9 @@ public class ClockController : MonoBehaviour
     public int minSample = 0;
     public int maxSample = 20000;
     public float tenToPower = 3;
+    public float threshold = 1;
+
+
 
     private List<Indicator> indicators = new();
 
@@ -99,6 +106,7 @@ public class ClockController : MonoBehaviour
 
     private void SpinClockOnMusic(float[] buff)
     {
+
         float avg = 0;
         for (int i = minSample; i < maxSample; i++)
         {
@@ -106,9 +114,49 @@ public class ClockController : MonoBehaviour
         }
         avg /= maxSample - minSample;
 
-        transform.Rotate(Vector3.forward, -avg*Mathf.Pow(10f,tenToPower));
+        MoveHourMarks(buff);
+
+        var rotationAmount = -avg * Mathf.Pow(10f, tenToPower);
+
+
+        if (MathF.Abs(rotationAmount) > threshold)
+        {
+            transform.Rotate(Vector3.forward, rotationAmount);
+
+            CompensateTextRotation(rotationAmount);
+        }
+        else
+        {
+            transform.Rotate(Vector3.forward, 0.1f);
+            CompensateTextRotation(0.1f);
+        }
+
     }
 
+    private void CompensateTextRotation(float rotationAmount)
+    {
+        foreach (var item in hourText)
+        {
+            item.Rotate(Vector3.forward, -rotationAmount);
+        }
+    }
+
+    private void MoveHourMarks(float[] buff)
+    {
+        var averageNoteValue = 0f;
+        for (int i = 2000; i < 4000; i++)
+        {
+            averageNoteValue += buff[i];
+        }
+        averageNoteValue /= 2000;
+
+        var offsetValue = averageNoteValue * MathF.Pow(10, 5);
+        foreach (var item in hourText)
+        {
+            item.transform.GetComponent<HourMark>().OffsetAnimation(offsetValue);
+            offsetValue = -offsetValue; 
+        }
+    }
 }
 [System.Serializable]
 public class ArrowObject
