@@ -726,8 +726,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   changeMat: {fileID: 2100000, guid: c51fb37932e39954b80562134d46ef4f, type: 2}
   xSize: 400
-  ySize: 39
-  saturation: 1
+  ySize: 10
+  saturation: 0.85
   value: 1
   bufferMulti: 1.7
   changeDamp: 2

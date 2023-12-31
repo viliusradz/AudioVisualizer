@@ -78,12 +78,16 @@ public class MeshControl : MonoBehaviour
         }
 
         uvs = new Vector3[vertices.Length];
+        var xMax = vertices[xSize].x;
+        var yMax = vertices[(xSize+1)*ySize].y;
         int ind = 0;
         for (int y = 0; y < ySize; y++)
         {
             for (int x = 0; x < xSize; x++)
             {
-                uvs[ind] = new Vector3(x, y);
+                var xNormalized = x / xMax;
+                var yNormalized = y/yMax; 
+                uvs[ind] = new Vector3(xNormalized, yNormalized);
             }
         }
 
