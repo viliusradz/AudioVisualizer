@@ -45,6 +45,7 @@ public class FrequencyAnalizer : MonoBehaviour
 
     private void Awake()
     {
+        Application.targetFrameRate = 60;
         if (inst == null)
             inst = this;
         else
@@ -62,7 +63,6 @@ public class FrequencyAnalizer : MonoBehaviour
 
         soundIn.Start();
 
-        Application.targetFrameRate = 60;
     }
     private void Update()
     {
