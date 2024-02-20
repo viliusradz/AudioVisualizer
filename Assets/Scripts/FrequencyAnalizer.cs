@@ -45,10 +45,16 @@ public class FrequencyAnalizer : MonoBehaviour
 
     private void Awake()
     {
+        #if !UNITY_EDITOR
+        StartCoroutine("MoveToMainWindow");
+        #endif
+
         if (inst == null)
             inst = this;
         else
             this.enabled = false;
+
+
         soundIn = new();
         soundIn.Initialize();
         soundSource = new(soundIn);
@@ -64,6 +70,19 @@ public class FrequencyAnalizer : MonoBehaviour
 
         Application.targetFrameRate = 60;
     }
+
+    IEnumerable MoveToMainWindow()
+    {
+        List<DisplayInfo> displays = new();
+        Screen.GetDisplayLayout(displays);
+        if(displays?.Count > 1)
+        {
+            var moveOperation = Screen.MoveMainWindowTo(displays[0], new Vector2Int(displays[0].width / 2, displays[0].height/2));
+            Console.WriteLine("moved");
+            yield return moveOperation;
+        }
+    }
+
     private void Update()
     {
         sampleExpo = (int)Math.Floor(Math.Log(sampleSource.WaveFormat.SampleRate * sampleSource.WaveFormat.Channels, 2));
